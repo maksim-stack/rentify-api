@@ -1,0 +1,46 @@
+# Build
+bin/
+obj/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Visual Studio
+.vs/
+
+# Rider
+.idea/
+
+# VS Code
+.vscode/
+
+# Logs
+*.log
+
+# NuGet
+*.nupkg
+packages/
+
+# ASP.NET Core secrets
+appsettings.Development.json
+secrets.json
+
+# Environment files
+.env
+
+# Node.js (если есть React/Vue/Angular frontend)
+node_modules/
+dist/
+
+# Publish
+publish/
+
+# EF Core
+Migrations/*.Designer.cs
+
+# OS files
+.DS_Store
+Thumbs.db
