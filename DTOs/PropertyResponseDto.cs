@@ -1,14 +1,10 @@
-﻿namespace RentalApp.Models
+﻿namespace RentalApp.DTOs
 {
-    public class Property
+    public class PropertyResponseDto
     {
         public int Id { get; set; }
         public required string Title { get; set; }
-        public string? Description { get; set; }
         public double PricePerNight { get; set; }
         public required string City { get; set; }
-        public int? OwnerId { get; set; }
-
-        public User Owner { get; set; } = null!;
     }
 }

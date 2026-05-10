@@ -18,21 +18,38 @@ namespace RentalApp.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll() 
+        public async Task<ActionResult<IEnumerable<PropertyResponseDto>>> GetAll()
         {
             var properties = await _propertyService.GetAllAsync();
-            return Ok(properties);
+
+            var response = properties.Select(p => new PropertyResponseDto
+            {
+                Id = p.Id,
+                Title = p.Title,
+                PricePerNight = p.PricePerNight,
+                City = p.City
+            });
+
+            return Ok(response);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id) 
-        {
-            var property = await _propertyService.GetByIdAsync(id);
-
+        {   
+            var property = await _propertyService.GetByIdAsync(id);  
+            
             if (property == null)
                 return NotFound();
 
-            return Ok(property);
+            var response = new PropertyResponseDto
+            {
+                Id = property.Id,
+                Title = property.Title,
+                PricePerNight = property.PricePerNight,
+                City = property.City
+            };
+
+            return Ok(response);
         }
 
         [HttpPost]
@@ -47,7 +64,7 @@ namespace RentalApp.Controllers
             };
 
             await _propertyService.AddAsync(property);
-            
+
             return CreatedAtAction(
                 nameof(GetById),
                 new { id = property.Id },
