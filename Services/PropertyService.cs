@@ -12,25 +12,25 @@ namespace RentalApp.Services
             _context = context;
         }
 
-        public List<Property> GetAll()
+        public async Task<List<Property>> GetAllAsync()
         {
-            return _context.Properties.ToList();
+            return await _context.Properties.ToListAsync();
         }
 
-        public Property? GetById(int id)
+        public async Task<Property?> GetByIdAsync(int id)
         {
-            return _context.Properties.FirstOrDefault(p => p.Id == id);
+            return await _context.Properties.FirstOrDefaultAsync(p => p.Id == id);
         }
 
-        public void Add(Property property)
+        public async Task AddAsync(Property property)
         {
-            _context.Properties.Add(property);
-            _context.SaveChanges();
+            await _context.Properties.AddAsync(property);
+            await _context.SaveChangesAsync();
         }
 
-        public bool Update(Property property)
+        public async Task<bool> UpdateAsync(Property property)
         {
-            var updatePropety = _context.Properties.FirstOrDefault(p => p.Id == property.Id);
+            var updatePropety = await _context.Properties.FirstOrDefaultAsync(p => p.Id == property.Id);
 
             if (updatePropety == null)
                 return false;
@@ -40,20 +40,20 @@ namespace RentalApp.Services
             updatePropety.PricePerNight = property.PricePerNight;
             updatePropety.City = property.City;
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return true;
         }
 
-        public bool Delete(int id)
+        public async Task<bool> DeleteAsync(int id)
         { 
-            var deletePropety = _context.Properties.FirstOrDefault(p => p.Id == id);
+            var deletePropety = await _context.Properties.FirstOrDefaultAsync(p => p.Id == id);
             
             if (deletePropety == null)
                 return false;
 
             _context.Properties.Remove(deletePropety);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return true;
         }

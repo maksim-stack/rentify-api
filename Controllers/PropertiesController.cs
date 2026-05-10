@@ -18,15 +18,16 @@ namespace RentalApp.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAll() 
+        public async Task<IActionResult> GetAll() 
         {
-            return Ok(_propertyService.GetAll());
+            var properties = await _propertyService.GetAllAsync();
+            return Ok(properties);
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetById(int id) 
+        public async Task<IActionResult> GetById(int id) 
         {
-            var property = _propertyService.GetById(id);
+            var property = await _propertyService.GetByIdAsync(id);
 
             if (property == null)
                 return NotFound();
@@ -35,7 +36,7 @@ namespace RentalApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create([FromBody] CreatePropertyDto dto)
+        public async Task<IActionResult> Create([FromBody] CreatePropertyDto dto)
         {
             var property = new Property
             {
@@ -45,7 +46,7 @@ namespace RentalApp.Controllers
                 City = dto.City!
             };
 
-            _propertyService.Add(property);
+            await _propertyService.AddAsync(property);
             
             return CreatedAtAction(
                 nameof(GetById),
@@ -54,7 +55,7 @@ namespace RentalApp.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult Update(int id, [FromBody] UpdatePropertyDto dto)
+        public async Task<IActionResult> Update(int id, [FromBody] UpdatePropertyDto dto)
         {
             var property = new Property
             {
@@ -65,7 +66,7 @@ namespace RentalApp.Controllers
                 City = dto.City!
             };
 
-            var updated = _propertyService.Update(property);
+            var updated = await _propertyService.UpdateAsync(property);
 
             if (!updated)
                 return NotFound();
@@ -74,9 +75,9 @@ namespace RentalApp.Controllers
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var deleted = _propertyService.Delete(id);
+            var deleted = await _propertyService.DeleteAsync(id);
 
             if (!deleted)
                 return NotFound();
