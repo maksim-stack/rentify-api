@@ -1,41 +1,36 @@
-﻿using RentalApp.Models;
+﻿using RentalApp.Data;
+using RentalApp.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace RentalApp.Services
 {
     public class PropertyService
     {
-        private readonly List<Property> _properties = new();
+        private readonly AppDbContext _context;
 
-        public PropertyService() {
-            _properties.Add(new Property
-            {
-                Id = 1,
-                Title = "Title",
-                Description = "Description",
-                PricePerNight = 100,
-                City = "Kyiv"
-            });
+        public PropertyService(AppDbContext context) {
+            _context = context;
         }
 
         public List<Property> GetAll()
         {
-            return _properties;
+            return _context.Properties.ToList();
         }
 
         public Property? GetById(int id)
         {
-            return _properties.FirstOrDefault(p => p.Id == id);
+            return _context.Properties.FirstOrDefault(p => p.Id == id);
         }
 
         public void Add(Property property)
         {
-            property.Id = _properties.Max(p => p.Id) + 1;
-            _properties.Add(property);
+            _context.Properties.Add(property);
+            _context.SaveChanges();
         }
 
         public bool Update(Property property)
         {
-            var updatePropety = _properties.FirstOrDefault(p => p.Id == property.Id);
+            var updatePropety = _context.Properties.FirstOrDefault(p => p.Id == property.Id);
 
             if (updatePropety == null)
                 return false;
@@ -44,19 +39,21 @@ namespace RentalApp.Services
             updatePropety.Description = property.Description;
             updatePropety.PricePerNight = property.PricePerNight;
             updatePropety.City = property.City;
-            updatePropety.OwnerId = property.OwnerId;
+
+            _context.SaveChanges();
 
             return true;
         }
 
         public bool Delete(int id)
         { 
-            var deletePropety = _properties.FirstOrDefault(p => p.Id == id);
+            var deletePropety = _context.Properties.FirstOrDefault(p => p.Id == id);
             
             if (deletePropety == null)
                 return false;
 
-            _properties.Remove(deletePropety);
+            _context.Properties.Remove(deletePropety);
+            _context.SaveChanges();
 
             return true;
         }
